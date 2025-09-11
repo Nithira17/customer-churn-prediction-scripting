@@ -11,6 +11,7 @@ from feature_binning import CustomBinningStrategy
 from feature_encoding import OrdinalEncodingStrategy, NominalEncodingStrategy
 from feature_scaling import MinMaxScalingStratergy
 from data_spiltter import SimpleTrainTestSplitStratergy
+from mlflow_utils import MLflowTracker, setup_mlflow_autolog, create_mlflow_run_tags
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'utils'))
 from config import get_data_paths, get_columns, get_missing_values_config, get_outlier_config, get_binning_config, get_encoding_config, get_scaling_config, get_splitting_config
 
@@ -29,6 +30,13 @@ def data_pipeline(
     encoding_config = get_encoding_config()
     scaling_config = get_scaling_config()
     splitting_config = get_splitting_config()
+
+    mlflow_tracker = MLflowTracker()
+    setup_mlflow_autolog()
+    run_tags = create_mlflow_run_tags('data_pipeline', {
+                                                        'data_source' : data_path
+                                                    })
+    run = mlflow_tracker.start_run(run_name='data_pipeline', tags=run_tags)
 
 
     print('Step 1: Data Ingestion')
