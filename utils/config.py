@@ -83,6 +83,9 @@ def get_logging_config():
     config = load_config()
     return config.get('logging', {})
 
+def get_mlflow_config():
+    config = load_config()
+    return config.get('mlflow', {})
 
 def get_environment_config():
     config = load_config()

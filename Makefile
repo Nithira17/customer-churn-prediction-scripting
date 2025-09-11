@@ -1,7 +1,10 @@
-.PHONY: all clean install train-pipeline data-pipeline streaming-inference run-all help
+.PHONY: all clean install train-pipeline data-pipeline streaming-inference run-all mlflow-ui help
 
 # Default Python interpreter
 PYTHON = python
+
+# Default MLflow port
+MLFLOW_PORT ?= 5000
 
 # Default target
 all: help
@@ -14,6 +17,7 @@ help:
 	@echo   make train-pipeline      - Run the training pipeline
 	@echo   make streaming-inference - Run the streaming inference pipeline with the sample JSON
 	@echo   make run-all             - Run all pipelines in sequence
+	@echo   make mlflow-ui           - Launch the MLflow UI on localhost:$(MLFLOW_PORT)
 	@echo   make clean               - Clean up artifacts
 
 # Install project dependencies and set up environment
@@ -79,3 +83,16 @@ run-all:
 	@echo ========================================
 	@echo All pipelines completed successfully!
 	@echo ========================================
+
+# Launch MLflow UI
+mlflow-ui:
+	@echo Launching MLflow UI...
+	@echo MLflow UI will be available at: http://localhost:$(MLFLOW_PORT)
+	@echo Press Ctrl+C to stop the server
+	.venv\Scripts\activate.bat && mlflow ui --host 0.0.0.0 --port $(MLFLOW_PORT)
+
+# Stop all MLflow servers
+stop-all:
+	@echo Stopping all MLflow servers on port $(MLFLOW_PORT)...
+	@for /f "tokens=5" %%a in ('netstat -ano ^| findstr :$(MLFLOW_PORT)') do taskkill /PID %%a /F >nul 2>&1
+	@echo All MLflow servers on port $(MLFLOW_PORT) have been stopped!

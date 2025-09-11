@@ -149,6 +149,18 @@ logging:
   format: "%(asctime)s - %(levelname)s - %(message)s"
   file: "pipeline.log"
 
+mlflow:
+  tracking_url: "file:./mlruns"
+  experiment_name: "Customer Churn Analysis"
+  model_registry_name: "Customer Churn Prediction - Scripting"
+  artifact_path: "model"
+  run_name_prefix: "churn_run"
+  tags:
+    project: "customer_churn_prediction"
+    team: "ml_engineering"
+    environment: "development"
+  autolog: true
+
 environment:
   experiment_name: "churn_analysis"
 
